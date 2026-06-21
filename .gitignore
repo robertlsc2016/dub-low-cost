@@ -3,3 +3,5 @@
 *.wav
 
 __pycache__
+
+src/files/output/*

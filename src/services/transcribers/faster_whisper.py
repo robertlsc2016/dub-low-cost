@@ -4,14 +4,16 @@ from deep_translator import GoogleTranslator
 from typing import Literal
 
 audio_path="src/files/audios/full_audio.wav"
+import time
 
 
 def transcribe(
     now,
     model_name: Literal["tiny", "base", "small", "medium", "large"] = "base"
 ):
+    start = time.time()
 
-    print("=== INICIANDO PROCESSO DE TRANSCRICAO")
+    print(f"=== INICIANDO PROCESSO DE TRANSCRICAO: faster_whisper | modelo: {model_name}")
 
     model = WhisperModel(
         model_name,
@@ -19,7 +21,11 @@ def transcribe(
         compute_type="int8"
     )
 
-    segments, info = model.transcribe(audio_path)
+    segments, info = model.transcribe(
+        audio_path,
+        beam_size=5,
+        vad_filter=True
+    )
 
     translator = GoogleTranslator(source="en", target="pt")
 
@@ -47,4 +53,6 @@ def transcribe(
     ) as f:
         json.dump(results, f, ensure_ascii=False, indent=4)
 
-    print("TRANSCRICAO FINALIZADA")
+    end = time.time()
+
+    print(f"TRANSCRICAO FINALIZADA - [{end - start:.4f}s]")

@@ -1,8 +1,6 @@
 from pathlib import Path
 
 
-
-
 def paths_struct(now):
     print("=== INICIANDO A CRIACAO E CHECAGEM DE ESTRUTURA DE PASTAS")
     paths = [
