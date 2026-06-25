@@ -9,9 +9,9 @@ from pydub import AudioSegment
 from typing import Literal
 
 
-VIDEO_ORIGINAL = "src/files/videos/video.mp4"
+VIDEO_ORIGINAL = "src/dubber/files/videos/video.mp4"
 
-os.makedirs("src/files/audios", exist_ok=True)
+os.makedirs("src/dubber/files/audios", exist_ok=True)
 
 
 # -----------------------------
@@ -28,7 +28,7 @@ async def gerar_audio_unico(segmentos):
         if seg["translated_text"].strip()
     )
 
-    arquivo_saida = "src/files/audios/full.mp3"
+    arquivo_saida = "src/dubber/files/audios/full.mp3"
 
     communicate = edge_tts.Communicate(
         text=texto,
@@ -43,14 +43,14 @@ async def gerar_audio_unico(segmentos):
 # -----------------------------
 # 2. MONTAR ÁUDIO FINAL
 # -----------------------------
-def montar_audio(now, audio_path):
+async def montar_audio(now, audio_path):
     """
     Converte o MP3 gerado pelo Edge-TTS para WAV.
     """
 
     audio = AudioSegment.from_file(audio_path)
 
-    output_audio = f"src/files/output/{now}/full_dub.wav"
+    output_audio = f"src/dubber/files/output/{now}/full_dub.wav"
 
     audio.export(
         output_audio,
@@ -63,17 +63,17 @@ def montar_audio(now, audio_path):
 # -----------------------------
 # 3. GERAR VÍDEO FINAL
 # -----------------------------
-def gerar_video_final(now):
+async def gerar_video_final(now):
     comando = [
         "ffmpeg",
         "-y",
         "-i", VIDEO_ORIGINAL,
-        "-i", f"src/files/output/{now}/full_dub.wav",
+        "-i", f"src/dubber/files/output/{now}/full_dub.wav",
         "-map", "0:v",
         "-map", "1:a",
         "-c:v", "copy",
         "-shortest",
-        f"src/files/output/{now}/full_video_dub.mp4"
+        f"src/dubber/files/output/{now}/full_video_dub.mp4"
     ]
 
     subprocess.run(
@@ -86,7 +86,7 @@ def gerar_video_final(now):
 # -----------------------------
 # 4. PIPELINE PRINCIPAL
 # -----------------------------
-def dub_video_egde(
+async def dub_video_egde(
     now,
     model_name: Literal["tiny", "base", "small", "medium", "large", "turbo"] = "base"
 ):
@@ -94,21 +94,20 @@ def dub_video_egde(
 
     print("=== INICIANDO PROCESSO DE DUBLAGEM ===")
 
-    json_path = f"src/files/output/{now}/transcrition_{model_name}.json"
+    json_path = f"src/dubber/files/output/{now}/transcrition_{model_name}.json"
 
     with open(json_path, "r", encoding="utf-8") as f:
         segmentos = json.load(f)
 
     print("Gerando áudio com Edge-TTS...")
-    audio_path = asyncio.run(
-        gerar_audio_unico(segmentos)
-    )
+    audio_path = await gerar_audio_unico(segmentos)
+
 
     print("Montando áudio final...")
-    montar_audio(now, audio_path)
+    await montar_audio(now, audio_path)
 
     print("Gerando vídeo...")
-    gerar_video_final(now)
+    await gerar_video_final(now)
 
     end = time.time()
 

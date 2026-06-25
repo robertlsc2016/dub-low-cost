@@ -1,0 +1,13 @@
+fastapi
+uvicorn[standard]
+python-multipart
+
+edge-tts
+pydub
+ffmpeg-python
+
+faster-whisper
+openai-whisper
+deep-translator
+
+numpy

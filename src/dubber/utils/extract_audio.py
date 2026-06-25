@@ -1,10 +1,10 @@
 import subprocess
 import os
 
-video_path = "src/files/videos/video.mp4"
-audio_path = "src/files/audios/full_audio.wav"
+video_path = "src/dubber/files/videos/video.mp4"
+audio_path = "src/dubber/files/audios/full_audio.wav"
 
-def extract_audio():
+async def extract_audio():
     print("EXTRAINDO AUDIO...")
 
     subprocess.run(

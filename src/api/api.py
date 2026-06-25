@@ -36,7 +36,7 @@ async def upload_video(video: UploadFile = File(...)):
         return {
             "success": True,
             # "paths": paths_result[]
-            "video": f"https://ufmt.me/{paths_result['video_path']}"
+            "video": f"http://localhost:8000{paths_result['video_path']}"
         }
 
     except Exception as e:

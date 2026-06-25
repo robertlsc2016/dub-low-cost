@@ -4,4 +4,6 @@
 
 __pycache__
 
-src/files/output/*
+src/dubber/files/output/*
+
+.env
