@@ -31,7 +31,7 @@ async def dub(
 
     await dub_video_egde(now, job, model_name_whisper)
 
-    # clean_audios()
+    clean_audios()
 
     end = time.time()
     print(
