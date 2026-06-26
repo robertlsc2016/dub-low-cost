@@ -9,8 +9,8 @@ services:
     ports:
       - "8085:8085"   # host:container
 
-    volumes:
-      - .:/app        # opcional (hot reload dev)
+    # volumes:
+      # - .:/app        # opcional (hot reload dev)
 
     environment:
       - PYTHONUNBUFFERED=1

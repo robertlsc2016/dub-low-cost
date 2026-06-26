@@ -10,8 +10,8 @@ import os
 app = FastAPI()
 
 app.mount(
-    "/files",
-    StaticFiles(directory="src/dubber/files/output"),
+    "/files/",
+    StaticFiles(directory="src/files/output"),
     name="files"
 )
 
@@ -23,7 +23,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-VIDEO_PATH = "src/dubber/files/videos/video.mp4"
+VIDEO_PATH = "src/files/videos/video.mp4"
 
 @app.post("/upload")
 async def upload_video(video: UploadFile = File(...)):

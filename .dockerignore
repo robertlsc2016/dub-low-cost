@@ -1,0 +1,48 @@
+src/files/
+**/files/
+files/
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Virtual env
+venv/
+.venv/
+env/
+ENV/
+
+# Distribuição / build
+build/
+dist/
+*.egg-info/
+
+# Testes / coverage
+.coverage
+htmlcov/
+.pytest_cache/
+.mypy_cache/
+
+# Logs
+*.log
+
+# Git
+.git/
+.gitignore
+
+# IDEs
+.vscode/
+.idea/
+
+# Docker
+Dockerfile
+docker-compose.yml
+
+# Environment variables
+.env
+
+# OS files
+.DS_Store
+Thumbs.db

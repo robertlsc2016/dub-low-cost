@@ -1,9 +1,11 @@
 from fastapi import FastAPI, UploadFile, File
 from fastapi.middleware.cors import CORSMiddleware
+
 from src.dubber.dub import dub
+from src.dubber.utils.paths_sctruct import paths_struct
+
 import traceback
 from fastapi.staticfiles import StaticFiles
-from src.dubber.utils.paths_sctruct import paths_struct
 
 import shutil
 import os
@@ -13,8 +15,8 @@ paths_struct()
 app = FastAPI()
 
 app.mount(
-    "/files",
-    StaticFiles(directory="src/dubber/files/output"),
+    "/files/",
+    StaticFiles(directory="src/files/output"),
     name="files"
 )
 
@@ -26,7 +28,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-VIDEO_PATH = "src/dubber/files/videos/video.mp4"
+VIDEO_PATH = "src/files/videos/video.mp4"
 
 @app.post("/upload")
 async def upload_video(video: UploadFile = File(...)):

@@ -9,9 +9,9 @@ from pydub import AudioSegment
 from typing import Literal
 
 
-VIDEO_ORIGINAL = "src/dubber/files/videos/video.mp4"
+VIDEO_ORIGINAL = "src/files/videos/video.mp4"
 
-os.makedirs("src/dubber/files/audios", exist_ok=True)
+os.makedirs("src/files/audios", exist_ok=True)
 
 
 # -----------------------------
@@ -28,7 +28,7 @@ async def gerar_audio_unico(segmentos):
         if seg["translated_text"].strip()
     )
 
-    arquivo_saida = "src/dubber/files/audios/full.mp3"
+    arquivo_saida = "src/files/audios/full.mp3"
 
     communicate = edge_tts.Communicate(
         text=texto,
@@ -50,7 +50,7 @@ async def montar_audio(now, audio_path):
 
     audio = AudioSegment.from_file(audio_path)
 
-    output_audio = f"src/dubber/files/output/{now}/full_dub.wav"
+    output_audio = f"src/files/output/{now}/full_dub.wav"
 
     audio.export(
         output_audio,
@@ -68,12 +68,12 @@ async def gerar_video_final(now):
         "ffmpeg",
         "-y",
         "-i", VIDEO_ORIGINAL,
-        "-i", f"src/dubber/files/output/{now}/full_dub.wav",
+        "-i", f"src/files/output/{now}/full_dub.wav",
         "-map", "0:v",
         "-map", "1:a",
         "-c:v", "copy",
         "-shortest",
-        f"src/dubber/files/output/{now}/full_video_dub.mp4"
+        f"src/files/output/{now}/full_video_dub.mp4"
     ]
 
     subprocess.run(
@@ -94,7 +94,7 @@ async def dub_video_egde(
 
     print("=== INICIANDO PROCESSO DE DUBLAGEM ===")
 
-    json_path = f"src/dubber/files/output/{now}/transcrition_{model_name}.json"
+    json_path = f"src/files/output/{now}/transcrition_{model_name}.json"
 
     with open(json_path, "r", encoding="utf-8") as f:
         segmentos = json.load(f)

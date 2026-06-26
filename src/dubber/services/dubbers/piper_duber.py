@@ -1,14 +1,15 @@
 import os
 import json
+
 import subprocess
 from pydub import AudioSegment
 from typing import Literal
 import time
 
 
-VIDEO_ORIGINAL = "src/dubber/files/videos/video.mp4"
+VIDEO_ORIGINAL = "src/files/videos/video.mp4"
 
-os.makedirs("src/dubber/files/audios", exist_ok=True)
+os.makedirs("src/files/audios", exist_ok=True)
 
 
 # -----------------------------
@@ -27,7 +28,7 @@ def gerar_audio_unico(segmentos, model_path):
         if seg["translated_text"].strip()
     )
 
-    arquivo_saida = "src/dubber/files/audios/full.wav"
+    arquivo_saida = "src/files/audios/full.wav"
 
     subprocess.run(
         [
@@ -56,7 +57,7 @@ def montar_audio(now, segmentos, audio_path):
     audio = AudioSegment.from_wav(audio_path)
 
     audio.export(
-        f"src/dubber/files/output/{now}/full_dub.wav",
+        f"src/files/output/{now}/full_dub.wav",
         format="wav"
     )
 
@@ -69,12 +70,12 @@ def gerar_video_final(now):
         "ffmpeg",
         "-y",
         "-i", VIDEO_ORIGINAL,
-        "-i", f"src/dubber/files/output/{now}/full_dub.wav",
+        "-i", f"src/files/output/{now}/full_dub.wav",
         "-map", "0:v",
         "-map", "1:a",
         "-c:v", "copy",
         "-shortest",
-        f"src/dubber/files/output/{now}/full_video_dub.mp4"
+        f"src/files/output/{now}/full_video_dub.mp4"
     ]
 
     subprocess.run(comando, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
@@ -91,12 +92,12 @@ def dub_video(
 
     print("=== INICIANDO PROCESSO DE DUBLAGEM")
 
-    json_path = f"src/dubber/files/output/{now}/transcrition_{model_name}.json"
+    json_path = f"src/files/output/{now}/transcrition_{model_name}.json"
 
     with open(json_path, "r", encoding="utf-8") as f:
         segmentos = json.load(f)
 
-    model_path = "src/dubber/files/piper/models/pt_BR-jeff-medium.onnx"
+    model_path = "src/files/piper/models/pt_BR-jeff-medium.onnx"
 
     print("Gerando áudio com Piper (modo otimizado)...")
     audio_path = gerar_audio_unico(segmentos, model_path)

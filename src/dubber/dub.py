@@ -22,7 +22,7 @@ async def dub():
     await extract_audio()
 
     # await paths_struct(now)
-    Path(f"src/dubber/files/output/{now}").mkdir(parents=True, exist_ok=True)
+    Path(f"src/files/output/{now}").mkdir(parents=True, exist_ok=True)
 
     await transcribe(now, model_name_whisper)
     
@@ -39,9 +39,9 @@ async def dub():
 
     
     return {
-        "video_path": f"/files/{now}/full_video_dub.mp4",
-        "audio_path": f"/files/{now}/full_dub.wav",
-        "transcrition_path": f"/files/{now}/transcrition_small.json"
+        "video_path": f"/files//{now}/full_video_dub.mp4",
+        "audio_path": f"/files//{now}/full_dub.wav",
+        "transcrition_path": f"/files//{now}/transcrition_small.json"
     }
 
 

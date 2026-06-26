@@ -3,7 +3,7 @@ import json
 from deep_translator import GoogleTranslator
 from typing import Literal
 
-audio_path="src/dubber/files/audios/full_audio.wav"
+audio_path="src/files/audios/full_audio.wav"
 import time
 
 
@@ -47,7 +47,7 @@ async def transcribe(
         })
 
     with open(
-        f"src/dubber/files/output/{now}/transcrition_{model_name}.json",
+        f"src/files/output/{now}/transcrition_{model_name}.json",
         "w",
         encoding="utf-8"
     ) as f:

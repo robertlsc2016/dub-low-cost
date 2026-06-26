@@ -9,7 +9,7 @@ def transcribe_whisper(now, model_name: Literal["tiny", "base", "small", "medium
 
     model = whisper.load_model(model_name)
 
-    result = model.transcribe("src/dubber/files/videos/video.mp4")
+    result = model.transcribe("src/files/videos/video.mp4")
 
     segments = []
 
@@ -28,7 +28,7 @@ def transcribe_whisper(now, model_name: Literal["tiny", "base", "small", "medium
             "translated_text": translated
         })
 
-    with open(f"src/dubber/files/output/{now}/transcrition_{model_name}.json", "w", encoding="utf-8") as f:
+    with open(f"src/files/output/{now}/transcrition_{model_name}.json", "w", encoding="utf-8") as f:
         json.dump(segments, f, ensure_ascii=False, indent=4)
 
         
