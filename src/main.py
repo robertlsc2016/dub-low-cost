@@ -3,9 +3,12 @@ from fastapi.middleware.cors import CORSMiddleware
 from src.dubber.dub import dub
 import traceback
 from fastapi.staticfiles import StaticFiles
+from src.dubber.utils.paths_sctruct import paths_struct
 
 import shutil
 import os
+
+paths_struct()
 
 app = FastAPI()
 

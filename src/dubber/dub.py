@@ -10,6 +10,7 @@ from src.dubber.services.transcribers.whisper import transcribe_whisper
 from typing import Literal
 from datetime import datetime
 import time
+from pathlib import Path
 
 
 async def dub():
@@ -20,7 +21,9 @@ async def dub():
     model_name_whisper: Literal["tiny", "base", "small", "medium", "large", "turbo"] = "tiny"
     await extract_audio()
 
-    await paths_struct(now)
+    # await paths_struct(now)
+    Path(f"src/dubber/files/output/{now}").mkdir(parents=True, exist_ok=True)
+
     await transcribe(now, model_name_whisper)
     
     # transcribe_whisper(now, model_name_whisper)
