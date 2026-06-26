@@ -39,9 +39,9 @@ async def dub():
 
     
     return {
-        "video_path": f"/files//{now}/full_video_dub.mp4",
-        "audio_path": f"/files//{now}/full_dub.wav",
-        "transcrition_path": f"/files//{now}/transcrition_small.json"
+        "video_path": f"files//{now}/full_video_dub.mp4",
+        "audio_path": f"files//{now}/full_dub.wav",
+        "transcrition_path": f"files//{now}/transcrition_small.json"
     }
 
 

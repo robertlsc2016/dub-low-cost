@@ -21,5 +21,5 @@ async def extract_audio():
         stdout=subprocess.DEVNULL,
         stderr=subprocess.DEVNULL,
         stdin=subprocess.DEVNULL,
-        creationflags=subprocess.CREATE_NO_WINDOW  # 👈 importante no Windows
+        # creationflags=subprocess.CREATE_NO_WINDOW  # 👈 importante no Windows
     )
