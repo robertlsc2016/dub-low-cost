@@ -13,6 +13,7 @@ import shutil
 import os
 from dotenv import load_dotenv
 load_dotenv()
+
 url_ambient = os.getenv("URL_AMBIENT")
 
 
@@ -65,7 +66,6 @@ async def upload_video(
             "model": model,
             "video": f"{url_ambient}/{paths_result['video_path']}",
             "time": end - start
-
         }
 
     except Exception as e:
