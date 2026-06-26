@@ -1,14 +1,20 @@
-from fastapi import FastAPI, UploadFile, File
+from fastapi import FastAPI, UploadFile, File, Form
 from fastapi.middleware.cors import CORSMiddleware
 
 from src.dubber.dub import dub
 from src.dubber.utils.paths_sctruct import paths_struct
-
+import secrets;
 import traceback
 from fastapi.staticfiles import StaticFiles
+import time
 
 import shutil
+
 import os
+from dotenv import load_dotenv
+load_dotenv()
+url_ambient = os.getenv("URL_AMBIENT")
+
 
 paths_struct()
 
@@ -28,20 +34,38 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-VIDEO_PATH = "src/files/videos/video.mp4"
 
 @app.post("/upload")
-async def upload_video(video: UploadFile = File(...)):
+async def upload_video(
+    video: UploadFile = File(...),
+    model: str = Form("small")  # default small
+):
+    paths_struct()
+
+    job = secrets.token_hex(2)
+    VIDEO_PATH = f"src/files/videos/video-{job}.mp4"
+
     try:
+        start = time.time()
+
+        print("Modelo recebido:", model)
+        print(f"modelo selecionado pelo usuario: {model}")
+        print(f"job: {job}")
+
         with open(VIDEO_PATH, "wb") as buffer:
             shutil.copyfileobj(video.file, buffer)
 
-        paths_result = await dub()
+        # return
+        # passa model pra sua pipeline
+        paths_result = await dub(job, model=model)
+        end = time.time()
 
         return {
             "success": True,
-            # "paths": paths_result[]
-            "video": f"https://ufmt.me/{paths_result['video_path']}"
+            "model": model,
+            "video": f"{url_ambient}/{paths_result['video_path']}",
+            "time": end - start
+
         }
 
     except Exception as e:

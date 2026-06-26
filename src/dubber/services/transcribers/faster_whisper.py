@@ -3,14 +3,16 @@ import json
 from deep_translator import GoogleTranslator
 from typing import Literal
 
-audio_path="src/files/audios/full_audio.wav"
 import time
 
 
 async def transcribe(
     now,
-    model_name: Literal["tiny", "base", "small", "medium", "large"] = "base"
+    job,
+    model_name: Literal["tiny", "base", "small", "medium", "large"] = "base",
 ):
+    audio_path= f"src/files/audios/full_trans_audio-{job}.wav"
+
     start = time.time()
 
     print(f"=== INICIANDO PROCESSO DE TRANSCRICAO: faster_whisper | modelo: {model_name}")

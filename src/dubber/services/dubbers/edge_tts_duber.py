@@ -9,7 +9,6 @@ from pydub import AudioSegment
 from typing import Literal
 
 
-VIDEO_ORIGINAL = "src/files/videos/video.mp4"
 
 os.makedirs("src/files/audios", exist_ok=True)
 
@@ -17,7 +16,7 @@ os.makedirs("src/files/audios", exist_ok=True)
 # -----------------------------
 # 1. GERAR ÁUDIO (EDGE-TTS)
 # -----------------------------
-async def gerar_audio_unico(segmentos):
+async def gerar_audio_unico(job, segmentos):
     """
     Gera um único áudio utilizando Edge-TTS.
     """
@@ -28,7 +27,7 @@ async def gerar_audio_unico(segmentos):
         if seg["translated_text"].strip()
     )
 
-    arquivo_saida = "src/files/audios/full.mp3"
+    arquivo_saida = f"src/files/audios/full_dub_audio-{job}.mp3"
 
     communicate = edge_tts.Communicate(
         text=texto,
@@ -43,14 +42,14 @@ async def gerar_audio_unico(segmentos):
 # -----------------------------
 # 2. MONTAR ÁUDIO FINAL
 # -----------------------------
-async def montar_audio(now, audio_path):
+async def montar_audio(now, job, audio_path):
     """
     Converte o MP3 gerado pelo Edge-TTS para WAV.
     """
 
     audio = AudioSegment.from_file(audio_path)
 
-    output_audio = f"src/files/output/{now}/full_dub.wav"
+    output_audio = f"src/files/output/{now}/full_dub_audio-{job}.wav"
 
     audio.export(
         output_audio,
@@ -63,17 +62,19 @@ async def montar_audio(now, audio_path):
 # -----------------------------
 # 3. GERAR VÍDEO FINAL
 # -----------------------------
-async def gerar_video_final(now):
+async def gerar_video_final(job, now):
+    VIDEO_ORIGINAL = f"src/files/videos/video-{job}.mp4"
+
     comando = [
         "ffmpeg",
         "-y",
         "-i", VIDEO_ORIGINAL,
-        "-i", f"src/files/output/{now}/full_dub.wav",
+        "-i", f"src/files/output/{now}/full_dub_audio-{job}.wav",
         "-map", "0:v",
         "-map", "1:a",
         "-c:v", "copy",
         "-shortest",
-        f"src/files/output/{now}/full_video_dub.mp4"
+        f"src/files/output/{now}/full_video_dub-{job}.mp4"
     ]
 
     subprocess.run(
@@ -88,6 +89,7 @@ async def gerar_video_final(now):
 # -----------------------------
 async def dub_video_egde(
     now,
+    job,
     model_name: Literal["tiny", "base", "small", "medium", "large", "turbo"] = "base"
 ):
     start = time.time()
@@ -100,14 +102,14 @@ async def dub_video_egde(
         segmentos = json.load(f)
 
     print("Gerando áudio com Edge-TTS...")
-    audio_path = await gerar_audio_unico(segmentos)
+    audio_path = await gerar_audio_unico(job, segmentos)
 
 
     print("Montando áudio final...")
-    await montar_audio(now, audio_path)
+    await montar_audio(now, job, audio_path)
 
     print("Gerando vídeo...")
-    await gerar_video_final(now)
+    await gerar_video_final(job, now)
 
     end = time.time()
 

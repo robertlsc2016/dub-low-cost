@@ -1,10 +1,9 @@
 import subprocess
-import os
 
-video_path = "src/files/videos/video.mp4"
-audio_path = "src/files/audios/full_audio.wav"
+async def extract_audio(job):
+    video_path = f"src/files/videos/video-{job}.mp4"
+    audio_path = f"src/files/audios/full_trans_audio-{job}.wav"
 
-async def extract_audio():
     print("EXTRAINDO AUDIO...")
 
     subprocess.run(
